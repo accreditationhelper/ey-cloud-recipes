@@ -1,7 +1,10 @@
 if ['solo', 'app_master', 'app'].include?(node[:instance_role])
 
+  instances = node[:engineyard][:environment][:instances]
+  redis_instance = (node[:instance_role][/solo/] && instances.length == 1) ? instances[0] : instances.find{|i| i[:name].to_s[/redis/]}
+
   # If you have only one utility instance uncomment the line below
-  redis_instance = node['utility_instances'].first
+  #redis_instance = node['utility_instances'].first
   # Otherwise, if you have multiple utility instances you can specify it by uncommenting the line below
   # You can change the name of the instance based on whatever name you have chosen for your instance.
   #redis_instance = node['utility_instances'].find { |instance| instance['name'] == 'redis' }
@@ -16,7 +19,7 @@ if ['solo', 'app_master', 'app'].include?(node[:instance_role])
         backup 0
         variables({
           :environment => node[:environment][:framework_env],
-          :hostname => redis_instance ? redis_instance[:hostname] : node[:hostname]
+          :hostname => redis_instance[:hostname]
         })
       end
     end
