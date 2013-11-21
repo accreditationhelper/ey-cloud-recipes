@@ -19,7 +19,7 @@ if ['solo', 'app_master', 'app'].include?(node[:instance_role])
         backup 0
         variables({
           :environment => node[:environment][:framework_env],
-          :hostname => redis_instance[:hostname]
+          :hostname => redis_instance[:private_hostname]
         })
       end
     end
